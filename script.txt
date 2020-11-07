@@ -1,0 +1,4 @@
+POST	http://localhost:5000/api/file
+{
+    "dir": "C:/Users/OdinPT/Desktop/lv.pdf"
+}
