@@ -41,7 +41,8 @@ namespace ReturninfoPDF.API.Controllers
         [HttpPost]
         public void CV_check(dirDto dirdto)
         {
-            
+
+         
 
             var sb = _repo.ConcatAllDataPDF(dirdto.dir);
             _repo.makefile(sb, FILETEMP);
@@ -86,9 +87,10 @@ namespace ReturninfoPDF.API.Controllers
                     Console.WriteLine("teste");
                }
 
-            _repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
+              //_repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
                 //pesquisar por ocr para analisar pelo nif no documento e depois pesquisar na net o niff e assim saber a entidade e quardar em documento
-
+                _repo.ExtrairTexto_PDF(dirdto.dir);
+                Console.WriteLine(_repo.ExtrairTexto_PDF(dirdto.dir));
 
             }
         }  

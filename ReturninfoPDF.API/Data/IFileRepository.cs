@@ -21,6 +21,8 @@ namespace ReturninfoPDF.API.Data
         string GetMouthString();
 
         void SaveAndMoveFile(string EntidadePDF, string dir);
+        
+
 
     }
 }
