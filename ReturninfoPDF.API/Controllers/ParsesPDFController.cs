@@ -1,24 +1,11 @@
 ﻿using AutoMapper;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
+using IronOcr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using PdfSharp.Pdf;
 using ReturninfoPDF.API.Data;
 using ReturninfoPDF.API.Dtos;
-using ReturninfoPDF.API.Modelos;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
-using Path = System.IO.Path;
-using PdfDocument = PdfSharp.Pdf.PdfDocument;
 
 namespace ReturninfoPDF.API.Controllers
 {
@@ -57,6 +44,15 @@ namespace ReturninfoPDF.API.Controllers
             {
                 _repo.SaveAndMoveFile("Unknown",  dirdto.dir);
                 Console.WriteLine("Unknown");
+                Console.WriteLine("entrou no if ");
+
+                var Ocr = new IronTesseract(); // nothing to configure
+                using (var Input = new OcrInput(@"C:\Users\leona\Documents\cc_leo.pdf"))
+                {
+                    var Result = Ocr.Read(Input);
+                    Console.WriteLine(Result.Text);
+                }
+
             } else {
 
                 var EntidadePDF = newList[0];
@@ -89,8 +85,7 @@ namespace ReturninfoPDF.API.Controllers
 
               //_repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
                 //pesquisar por ocr para analisar pelo nif no documento e depois pesquisar na net o niff e assim saber a entidade e quardar em documento
-                _repo.ExtrairTexto_PDF(dirdto.dir);
-                Console.WriteLine(_repo.ExtrairTexto_PDF(dirdto.dir));
+        
 
             }
         }  
