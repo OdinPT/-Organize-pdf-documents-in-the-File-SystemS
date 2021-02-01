@@ -26,11 +26,12 @@ namespace ReturninfoPDF.API.Controllers
         }
 
         [HttpPost]
+
+        //testar, enviar ficheiro ao inve
+        //public void CV_check(dirDto dirdto)
         public void CV_check(dirDto dirdto)
         {
-
-         
-
+            Console.WriteLine(dirdto.dir);
             var sb = _repo.ConcatAllDataPDF(dirdto.dir);
             _repo.makefile(sb, FILETEMP);
 
@@ -39,7 +40,8 @@ namespace ReturninfoPDF.API.Controllers
             var myString = ".pt";
             var newList = list.Where(x => x.Contains(myString)).ToList();
 
-             
+              //entra aqui quando o documento é composto por uma imagem dentro do pdf
+
             if (newList.Count() == 0)
             {
                 _repo.SaveAndMoveFile("Unknown",  dirdto.dir);
@@ -47,10 +49,16 @@ namespace ReturninfoPDF.API.Controllers
                 Console.WriteLine("entrou no if ");
 
                 var Ocr = new IronTesseract(); // nothing to configure
-                using (var Input = new OcrInput(@"C:\Users\leona\Documents\cc_leo.pdf"))
+                Console.WriteLine(dirdto.dir);
+                //using (var Input = new OcrInput(@"C:\Users\leona\Documents\documentação_P\cc_pic.pdf")) 
+                using (var Inputdata = new OcrInput(dirdto.dir)) 
                 {
-                    var Result = Ocr.Read(Input);
-                    Console.WriteLine(Result.Text);
+                    
+                    Console.WriteLine(Ocr.Read(dirdto.dir));
+
+                    var Results = Ocr.Read(dirdto.dir);
+                    Console.WriteLine(Results.Text);
+
                 }
 
             } else {
@@ -83,7 +91,7 @@ namespace ReturninfoPDF.API.Controllers
                     Console.WriteLine("teste");
                }
 
-              //_repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
+              _repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
                 //pesquisar por ocr para analisar pelo nif no documento e depois pesquisar na net o niff e assim saber a entidade e quardar em documento
         
 

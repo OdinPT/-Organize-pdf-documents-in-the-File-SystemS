@@ -10,5 +10,6 @@ namespace ReturninfoPDF.API.Dtos
     {
         
         public string dir { get; set; }
+
     }
 }
