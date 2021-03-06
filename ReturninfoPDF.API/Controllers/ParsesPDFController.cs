@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using ReturninfoPDF.API.Data;
 using ReturninfoPDF.API.Dtos;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace ReturninfoPDF.API.Controllers
@@ -26,9 +27,6 @@ namespace ReturninfoPDF.API.Controllers
         }
 
         [HttpPost]
-
-        //testar, enviar ficheiro ao inve
-        //public void CV_check(dirDto dirdto)
         public void CV_check(dirDto dirdto)
         {
             Console.WriteLine(dirdto.dir);
@@ -37,34 +35,82 @@ namespace ReturninfoPDF.API.Controllers
 
             var list = _repo.makelist(FILETEMP);
 
+            foreach (object o in list)
+            {
+                Console.WriteLine(o);
+            }
+
+            Console.WriteLine("<br>");
+
+            
             var myString = ".pt";
             var newList = list.Where(x => x.Contains(myString)).ToList();
 
-              //entra aqui quando o documento é composto por uma imagem dentro do pdf
+
+
+
 
             if (newList.Count() == 0)
             {
-                _repo.SaveAndMoveFile("Unknown",  dirdto.dir);
-                Console.WriteLine("Unknown");
-                Console.WriteLine("entrou no if ");
+                //fiquei aqui
+                //quando a fatura é originada a partir de scan (foto) entra aqui a ideia é varrer a fatura e descobrir o url da empresa se nao ouver colocar como desconhecido
+                //depois colocar ela a criar base de dados e a armazenar nome do ficheiro, localizaçáo entidade e também de existe SN no caso de fatura de algum equipamento.
 
-                var Ocr = new IronTesseract(); // nothing to configure
+                //_repo.SaveAndMoveFile("Unknown",  dirdto.dir);
+                Console.WriteLine("Unknown", dirdto.dir);
+
+                var Ocr = new IronTesseract();
                 Console.WriteLine(dirdto.dir);
-                //using (var Input = new OcrInput(@"C:\Users\leona\Documents\documentação_P\cc_pic.pdf")) 
-                using (var Inputdata = new OcrInput(dirdto.dir)) 
+
+                //cange "/" to "\"
+                using FileStream fs = System.IO.File.Open(dirdto.dir, FileMode.Open, FileAccess.Read, FileShare.Read);
+                Console.WriteLine(dirdto.dir);
+                var t = fs.Name.Replace("\"", "/");
+
+
+                Console.WriteLine("depois ");
+                Console.WriteLine(t);
+
+                var sbx = _repo.ConcatAllDataPDF(dirdto.dir);
+                _repo.makefile(sbx, FILETEMP);
+
+                var listx = _repo.makelist(FILETEMP);
+
+                foreach (object o in listx)
                 {
-                    
-                    Console.WriteLine(Ocr.Read(dirdto.dir));
-
-                    var Results = Ocr.Read(dirdto.dir);
-                    Console.WriteLine(Results.Text);
-
+                    Console.WriteLine(o);
                 }
 
-            } else {
+                Console.WriteLine("<br>");
+
+                var myStringx = ".pt";
+                var newListx = list.Where(Y => Y.Contains(myStringx)).ToList();
+
+                Console.WriteLine("<br>");
+
+                foreach (object o in newListx)
+                {
+                    Console.WriteLine(" =>" + o);
+                }
+
+                Console.WriteLine("AQUI ========================================>");
+
+                //_repo.SaveAndMoveFile("Unknown", t);
+                //Console.WriteLine("Unknown", t);
+
+               
+                var lastWord = t.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last();
+                                                                                                                       //retira testo antes do .pdf
+                var a = lastWord.Split('.');
+                Console.WriteLine(a[0]);
+
+                _repo.SaveAndMoveFile(a[0], t);
+
+            }
+            else {
 
                 var EntidadePDF = newList[0];
-                 //verifica se existe www.XXX.com no pdf se não existir ele retorna linha então depois é retirar o link de lá.
+                                                                                                                                     //verifica se existe www.XXX.com no pdf se não existir ele retorna linha então depois é retirar o link de lá.
                 var existeURL = EntidadePDF.Contains("www.");
 
            
