@@ -26,6 +26,8 @@ namespace ReturninfoPDF.API.Controllers
             _mapper = mapper;
         }
 
+
+
         [HttpPost]
         public void CV_check(dirDto dirdto)
         {
@@ -40,15 +42,8 @@ namespace ReturninfoPDF.API.Controllers
                 Console.WriteLine(o);
             }
 
-            Console.WriteLine("<br>");
-
-            
             var myString = ".pt";
             var newList = list.Where(x => x.Contains(myString)).ToList();
-
-
-
-
 
             if (newList.Count() == 0)
             {
@@ -56,7 +51,6 @@ namespace ReturninfoPDF.API.Controllers
                 //quando a fatura é originada a partir de scan (foto) entra aqui a ideia é varrer a fatura e descobrir o url da empresa se nao ouver colocar como desconhecido
                 //depois colocar ela a criar base de dados e a armazenar nome do ficheiro, localizaçáo entidade e também de existe SN no caso de fatura de algum equipamento.
 
-                //_repo.SaveAndMoveFile("Unknown",  dirdto.dir);
                 Console.WriteLine("Unknown", dirdto.dir);
 
                 var Ocr = new IronTesseract();
@@ -92,8 +86,6 @@ namespace ReturninfoPDF.API.Controllers
                 {
                     Console.WriteLine(" =>" + o);
                 }
-
-                Console.WriteLine("AQUI ========================================>");
 
                 //_repo.SaveAndMoveFile("Unknown", t);
                 //Console.WriteLine("Unknown", t);
