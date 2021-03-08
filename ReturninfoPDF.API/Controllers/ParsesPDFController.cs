@@ -31,10 +31,9 @@ namespace ReturninfoPDF.API.Controllers
         [HttpPost]
         public void CV_check(dirDto dirdto)
         {
-            Console.WriteLine(dirdto.dir);
+            
             var sb = _repo.ConcatAllDataPDF(dirdto.dir);
             _repo.makefile(sb, FILETEMP);
-
             var list = _repo.makelist(FILETEMP);
 
             foreach (object o in list)
@@ -51,19 +50,13 @@ namespace ReturninfoPDF.API.Controllers
                 //quando a fatura é originada a partir de scan (foto) entra aqui a ideia é varrer a fatura e descobrir o url da empresa se nao ouver colocar como desconhecido
                 //depois colocar ela a criar base de dados e a armazenar nome do ficheiro, localizaçáo entidade e também de existe SN no caso de fatura de algum equipamento.
 
-                Console.WriteLine("Unknown", dirdto.dir);
-
                 var Ocr = new IronTesseract();
                 Console.WriteLine(dirdto.dir);
 
                 //cange "/" to "\"
-                using FileStream fs = System.IO.File.Open(dirdto.dir, FileMode.Open, FileAccess.Read, FileShare.Read);
-                Console.WriteLine(dirdto.dir);
-                var t = fs.Name.Replace("\"", "/");
 
-
-                Console.WriteLine("depois ");
-                Console.WriteLine(t);
+                var replace = _repo.ChanceSlash(dirdto.dir);
+                Console.WriteLine(replace.ToString());
 
                 var sbx = _repo.ConcatAllDataPDF(dirdto.dir);
                 _repo.makefile(sbx, FILETEMP);
@@ -75,28 +68,20 @@ namespace ReturninfoPDF.API.Controllers
                     Console.WriteLine(o);
                 }
 
-                Console.WriteLine("<br>");
-
                 var myStringx = ".pt";
                 var newListx = list.Where(Y => Y.Contains(myStringx)).ToList();
-
-                Console.WriteLine("<br>");
 
                 foreach (object o in newListx)
                 {
                     Console.WriteLine(" =>" + o);
                 }
-
-                //_repo.SaveAndMoveFile("Unknown", t);
-                //Console.WriteLine("Unknown", t);
-
-               
-                var lastWord = t.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last();
+          
+                var lastWord = replace.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last();
                                                                                                                        //retira testo antes do .pdf
                 var a = lastWord.Split('.');
                 Console.WriteLine(a[0]);
 
-                _repo.SaveAndMoveFile(a[0], t);
+                _repo.SaveAndMoveFile(a[0], replace);
 
             }
             else {
@@ -108,7 +93,8 @@ namespace ReturninfoPDF.API.Controllers
            
                if (existeURL == true) {
 
-                 var charsToRemove = new string[] { "www.", ".pt" };
+                var charsToRemove = new string[] { "www.", ".pt" };
+                
                  foreach (var c in charsToRemove) {
                     EntidadePDF = EntidadePDF.Replace(c, string.Empty);
                     EntidadePDF = EntidadePDF.Split('*').Last();
@@ -118,21 +104,18 @@ namespace ReturninfoPDF.API.Controllers
 
                } else {
               
-
                  string[] s = EntidadePDF.Split(".pt");
                  EntidadePDF = s[0];
 
                  //  procurar por last word from array
                  EntidadePDF = EntidadePDF.Split(' ').Last();
-
                  Console.WriteLine(EntidadePDF);
-                    Console.WriteLine("teste");
+
                }
 
               _repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
                 //pesquisar por ocr para analisar pelo nif no documento e depois pesquisar na net o niff e assim saber a entidade e quardar em documento
         
-
             }
         }  
     }

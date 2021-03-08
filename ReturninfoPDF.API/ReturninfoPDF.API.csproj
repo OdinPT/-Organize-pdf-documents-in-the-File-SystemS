@@ -5,16 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\DataContext.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="IronOcr" Version="2020.11.2" />
     <PackageReference Include="IronOcr.Languages.Portuguese" Version="2020.11.2" />
     <PackageReference Include="iTextSharp" Version="5.5.13.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.6.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0" />
     <PackageReference Include="PDFsharp" Version="1.50.5147" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="Tesseract" Version="3.3.0" />

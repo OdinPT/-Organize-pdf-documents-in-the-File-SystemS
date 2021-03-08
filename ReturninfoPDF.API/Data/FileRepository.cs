@@ -112,7 +112,15 @@ namespace ReturninfoPDF.API.Data
                 System.IO.File.Copy(dir, destinationFile01);
             }
         }
-      
+
+        public string ChanceSlash(string directory)
+        {
+            using FileStream fs = System.IO.File.Open(directory, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var t = fs.Name.Replace("\"", "/");
+
+            return t;
+            //throw new NotImplementedException();
+        }
     }
 }
 
