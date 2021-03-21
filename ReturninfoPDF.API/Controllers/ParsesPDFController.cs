@@ -113,7 +113,10 @@ namespace ReturninfoPDF.API.Controllers
 
                }
 
-              _repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
+              
+                
+                
+                _repo.SaveAndMoveFile(EntidadePDF, dirdto.dir);
                 //pesquisar por ocr para analisar pelo nif no documento e depois pesquisar na net o niff e assim saber a entidade e quardar em documento
         
             }
