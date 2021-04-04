@@ -12,5 +12,7 @@ namespace ReturninfoPDF.API.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<File_CV> File_CVs { get; set; }
+
+        public DbSet<Files> Filess { get; set; }
     }
 }

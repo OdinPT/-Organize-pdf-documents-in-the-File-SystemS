@@ -62,7 +62,7 @@ namespace ReturninfoPDF.API.Data
             sw.WriteLine(sb.ToString());
             sw.Close();
         }
-        //alias de retornar uma lista chama logo a outra função
+        
         public string[] makelist( string tempfile)
         {
            
